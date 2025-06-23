@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./docs/*"
+      ]
+    },
+    "types": [
+      "element-plus/global"
+    ]
+  },
+  "include": [
+    "./docs/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

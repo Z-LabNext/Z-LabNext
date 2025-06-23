@@ -1,0 +1,39 @@
+# 忽略 node_modules 目录
+node_modules/
+
+# 忽略构建输出目录
+/docs/.vitepress/dist/
+/docs/.vitepress/cache/
+
+# 忽略 package-lock.json、yarn.lock、pnpm-lock.yaml 等（根据你使用的包管理器选择）
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 忽略编辑器和IDE配置文件
+.vscode/*
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 忽略系统隐藏文件
+.DS_Store
+Thumbs.db
+
+# 忽略日志与环境变量文件
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 忽略 macOS 特有文件
+__MACOSX
