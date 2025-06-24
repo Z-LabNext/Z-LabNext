@@ -58,4 +58,5 @@ export default defineConfig({
     },
   },
   lastUpdated: true,
+  base: "/Z-LabNext/",
 });
