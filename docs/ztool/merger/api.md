@@ -4,29 +4,70 @@
 
 单元格合并工具类
 
-**语法**
+### 语法
 
-`new CellMerger(options)`
+`new CellMerger(params)`
 
-**参数**
+#### params
 
-| 名称                                | 类型      | 必填 | 默认值 | 描述                                                     |
-| ----------------------------------- | --------- | ---- | ------ | -------------------------------------------------------- |
-| options.dataSource                  | `Array`   | 是   |        | 数据源                                                   |
-| [options.mergeFields](#mergefields) | `Array`   | 是   |        | 需要进行「行合并」的字段                                 |
-| options.genSort                     | `boolean` | 否   |        | 是否生成「行合并」后的序号                               |
-| options.sortBy                      | `string`  | 否   |        | 按照该字段的纬度进行排序 ( 默认取 mergeFields 的第一项 ) |
-| [options.mode](#mode)               | `number`  | 是   |        | 合并模式                                                 |
-| [options.columns](#columns)         | `Array`   | 否   |        | 列头                                                     |
-| options.reCalc                      | `boolean` | 否   | false  | 是否重新计算合并 ( 例如，动态表格增加后重新计算合并 )    |
+| 字段   | 类型     | 必填 | 默认值 | 描述     |
+| ------ | -------- | ---- | ------ | -------- |
+| params | `Object` | 是   |        | 配置参数 |
 
-**方法**
+#### params 属性
+
+| 字段                        | 类型                 | 必填 | 默认值  | 描述                                                     |
+| --------------------------- | -------------------- | ---- | ------- | -------------------------------------------------------- |
+| dataSource                  | `Object[]`           | 是   |         | 数据源                                                   |
+| [mergeFields](#mergefields) | `string[]\|Object[]` | 是   |         | 需要进行「行合并」的字段                                 |
+| genSort                     | `boolean`            | 否   |         | 是否生成「行合并」后的序号                               |
+| sortBy                      | `string`             | 否   |         | 按照该字段的纬度进行排序 ( 默认取 mergeFields 的第一项 ) |
+| [mode](#mode)               | `number`             | 是   |         | 合并模式                                                 |
+| [columns](#columns)         | `Object[]`           | 否   |         | 列头(合并列时必填)                                       |
+| reCalc                      | `boolean`            | 否   | `false` | 是否重新计算合并 ( 例如，动态表格增加后重新计算合并 )    |
+
+#### mode 属性
+
+| 名称       | 类型         | 值    | 描述                                                                   |
+| ---------- | ------------ | ----- | ---------------------------------------------------------------------- |
+| Row        | `number`     | 0     | 合并行                                                                 |
+| Col        | `number`     | 1     | 合并列                                                                 |
+| ~~RowCol~~ | ~~`number`~~ | ~~2~~ | ~~合并行和列 (已弃用)~~ :rotating_light:: 实际展示效果不好，所以废弃了 |
+
+#### mergeFields 属性
+
+| 名称     | 类型       | 必填 | 描述                         |
+| -------- | ---------- | ---- | ---------------------------- |
+| field    | `string`   | 是   | 字段名称                     |
+| callback | `Function` | 是   | 自定义逻辑进行「行合并计算」 |
+
+#### columns 属性
+
+| 名称 | 类型     | 必填 | 描述   |
+| ---- | -------- | ---- | ------ |
+| prop | `string` | 是   | 列字段 |
+
+```js
+const columns = [
+  {
+    prop: "name",
+  },
+  {
+    prop: "age",
+  },
+  {
+    prop: "address",
+  },
+];
+```
+
+### 方法
 
 | 名称          | 参数 | 描述             |
 | ------------- | ---- | ---------------- |
 | getMergedData | --   | 获取合并后的数据 |
 
-**示例代码**
+### 示例代码
 
 ```js
 import { CellMerger, Mode } from "@zlabnext/ztool";
@@ -58,100 +99,19 @@ const cellMerger = new CellMerger(options);
 const mergedData = cellMerger.getMergedData();
 ```
 
-#### mode
-
-合并模式
-
-**属性**
-
-| 名称       | 类型         | 值    | 描述                                                                   |
-| ---------- | ------------ | ----- | ---------------------------------------------------------------------- |
-| Row        | `number`     | 0     | 合并行                                                                 |
-| Col        | `number`     | 1     | 合并列                                                                 |
-| ~~RowCol~~ | ~~`number`~~ | ~~2~~ | ~~合并行和列 (已弃用)~~ :rotating_light:: 实际展示效果不好，所以废弃了 |
-
-**示例代码**
-
-```js
-import { Mode } from "@zlabnext/ztool";
-
-const mode = Mode.Row;
-```
-
-#### mergeFields
-
-在进行“列”合并时，必须传入全部列的 prop。
-
-**语法**
-
-`mergeFields: item[]`
-
-**属性**
-
-| 名称     | 类型       | 必填 | 描述                         |
-| -------- | ---------- | ---- | ---------------------------- |
-| field    | `string`   | 是   | 字段名称                     |
-| callback | `Function` | 是   | 自定义逻辑进行「行合并计算」 |
-
-**示例代码**
-
-```js
-const mergeFields = ["province"];
-/* 
-或者使用自定义条件
-const mergeFields = [
-  {
-    field: 'province',
-    callback(curItem, nextItem) {
-      return curItem.province === nextItem.province;
-    },
-  },
-]; */
-```
-
-#### columns
-
-定义列数组，一般在“列”合并中使用。
-
-**语法**
-
-`columns: item[]`
-
-**属性**
-
-| 名称 | 类型     | 必填 | 描述   |
-| ---- | -------- | ---- | ------ |
-| prop | `string` | 是   | 列字段 |
-
-**示例代码**
-
-```js
-const columns = [
-  {
-    prop: "name",
-  },
-  {
-    prop: "age",
-  },
-  {
-    prop: "address",
-  },
-];
-```
-
 ## getMergedData
 
 获取合并后的数据
 
-**语法**
+### 语法
 
-`getMergedData(options)`
+`getMergedData(params)`
 
-**参数**
+#### params
 
 同 [CellMerger](#cellmerger)
 
-**示例代码**
+### 示例代码
 
 ```js
 import { getMergedData, Mode } from "@zlabnext/ztool";
@@ -186,18 +146,18 @@ const mergeData = getMergedData(options);
 
 获取字段合并配置，例如为 [el-table](https://element.eleme.io/#/zh-CN/component/table) 处理 spanMethod
 
-**语法**
+### 语法
 
 `getFieldSpan(row, field)`
 
-**参数**
+#### 参数
 
-| 名称  | 类型     | 必填 | 描述               |
+| 字段  | 类型     | 必填 | 描述               |
 | ----- | -------- | ---- | ------------------ |
 | row   | `Object` | 是   | 行数据             |
 | field | `string` | 是   | 目标字段的合并数据 |
 
-**示例代码**
+### 示例代码
 
 ```js
 import { getFieldSpan } from "@zlabnext/ztool";
@@ -219,21 +179,27 @@ const spanMethod = ({ row, columnIndex }) => {
 
 将数据拆分为二维数组，一般用于分页打印 PDF。
 
-**语法**
+### 语法
 
 `splitIntoFragments(options)`
 
-**属性**
+#### params
 
-| 名称             | 类型     | 必填 | 描述     |
-| ---------------- | -------- | ---- | -------- |
-| options.pageSize | `number` | 是   | 每段条数 |
+| 字段   | 类型     | 必填 | 描述     |
+| ------ | -------- | ---- | -------- |
+| params | `Object` | 是   | 配置参数 |
+
+#### params 属性
+
+| 字段     | 类型     | 必填 | 描述       |
+| -------- | -------- | ---- | ---------- |
+| pageSize | `number` | 是   | 每段的条数 |
 
 ::: tip
 其他属性同 [CellMerger](#cellmerger)
 :::
 
-**示例代码**
+### 示例代码
 
 ```js
 import { splitIntoFragments } from "@zlabnext/ztool";
@@ -291,17 +257,17 @@ const result = splitIntoFragments({
 
 获取序号值，在“行”合并时使用。
 
-**语法**
+### 语法
 
-`getSortNo(row)`
+`getSortNo(params)`
 
-**参数**
+#### params
 
-| 名称 | 类型     | 必填 | 描述   |
-| ---- | -------- | ---- | ------ |
-| row  | `Object` | 是   | 行数据 |
+| 名称   | 类型     | 必填 | 描述   |
+| ------ | -------- | ---- | ------ |
+| params | `Object` | 是   | 行数据 |
 
-**示例代码**
+### 示例代码
 
 ```js
 import { getSortNo } from "@zlabnext/ztool";
