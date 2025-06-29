@@ -1,15 +1,8 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, reactive, ref } from "vue";
 import { Option } from "@zlabnext/ztool";
 
-const dataSource = [
-  { taskName: "待办任务a", taskStatus: "1" },
-  { taskName: "待办任务b", taskStatus: "2" },
-  { taskName: "待办任务c", taskStatus: "3" },
-];
-
-const tableData = ref([]);
-// 状态映射
+/* 状态映射 */
 const taskStatusMap = new Option({
   dataSource: [
     { label: "待提交", value: "1" },
@@ -18,6 +11,15 @@ const taskStatusMap = new Option({
   ],
 });
 
+/* 表格数据 */
+const dataSource = [
+  { taskName: "待办任务a", taskStatus: "1" },
+  { taskName: "待办任务b", taskStatus: "2" },
+  { taskName: "待办任务c", taskStatus: "3" },
+];
+const tableData = ref([]);
+
+/* 查询表单逻辑 */
 const formRef = ref();
 const formData = reactive({});
 const onQuery = () => {
@@ -66,13 +68,19 @@ onMounted(() => {
         </el-col>
       </el-row>
     </el-form>
+    <el-alert :closable="false"
+      >当前选中对象:
+      {{
+        taskStatusMap.getItemByValue(formData.taskStatus) || "暂无"
+      }}</el-alert
+    >
     <el-table :data="tableData">
       <el-table-column label="序号" type="index" :width="60"></el-table-column>
       <el-table-column label="任务名称" property="taskName"></el-table-column>
       <el-table-column label="任务状态" property="taskStatus">
         <template #default="scope">
           <el-tag>{{
-            taskStatusMap.getLabel({ key: scope.row.taskStatus })
+            taskStatusMap.getLabelTextByValue(scope.row.taskStatus, true)
           }}</el-tag>
         </template>
       </el-table-column>
