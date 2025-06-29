@@ -446,7 +446,7 @@ console.log(result2); // ['123']
 | errorCode       | `string\|number`             | 否   | -    | 接口失败标识     |
 | errorCallback   | `(code, message) => unknown` | 否   | -    | 接口返回失败回调 |
 
-### 实例代码
+### 示例代码
 
 ```js
 import { setErrorTrapGlobalConfig, errorTrap } from "@zlabnext/ztool";
@@ -483,4 +483,39 @@ const createUser = () => {
   }
   console.log("创建用户成功");
 };
+```
+
+## 计算页码 ( 删除数据后 )
+
+### 语法
+
+`calcPageAfterDelete(page, pageSize, total)`
+
+### 属性
+
+| 字段     | 类型     | 必填 | 默认 | 描述     |
+| -------- | -------- | ---- | ---- | -------- |
+| page     | `number` | 是   | -    | 当前页码 |
+| pageSize | `number` | 是   | -    | 每页条数 |
+| total    | `number` | 否   | -    | 总条数   |
+
+### 示例代码
+
+```js
+import { calcPageAfterDelete } from "@zlabnext/ztool";
+
+const pageProps = {
+  page: 2,
+  pageSize: 15,
+  total: 15,
+};
+
+// 模拟删除一条数据
+pageProps.total -= 1;
+
+// 重新计算页码
+pageProps.page = calcPageAfterDelete(page, pageSize, total);
+
+// 这里会输出: 1
+console.log(pageProps.page);
 ```

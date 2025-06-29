@@ -22,7 +22,7 @@
     "node": "22.16.0"
   },
   "dependencies": {
-    "@zlabnext/ztool": "^1.0.6",
+    "@zlabnext/ztool": "^1.0.10",
     "element-plus": "^2.10.2"
   }
 }
