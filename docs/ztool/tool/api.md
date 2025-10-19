@@ -116,7 +116,9 @@ console.log(replaceEmpty(false)); // false
 >
 > 请使用 [下载文件 v2](#下载文件v2)
 
-## 下载文件 v2
+## ~~下载文件 v2~~ <Badge type="danger" text="弃用"></Badge>
+
+请使用 [FileSaver.js](https://github.com/eligrey/FileSaver.js)
 
 ### 语法
 
