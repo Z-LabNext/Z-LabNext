@@ -20,11 +20,17 @@
 | --------------------------- | -------------------- | ---- | ------- | -------------------------------------------------------- |
 | dataSource                  | `Object[]`           | 是   |         | 数据源                                                   |
 | [mergeFields](#mergefields) | `string[]\|Object[]` | 是   |         | 需要进行「行合并」的字段                                 |
-| genSort                     | `boolean`            | 否   |         | 是否生成「行合并」后的序号                               |
+| [mode](#mode)               | `number`             | 是   |         | 合并模式 ( 传入非法值时，回退为 `Mode.Row` )             |
+| [columns](#columns)         | `Object[]`           | 否   |         | 列头 ( 合并列时必填 )                                    |
+| genSort                     | `boolean`            | 否   | `false` | 是否生成「行合并」后的序号                               |
 | sortBy                      | `string`             | 否   |         | 按照该字段的纬度进行排序 ( 默认取 mergeFields 的第一项 ) |
-| [mode](#mode)               | `number`             | 是   |         | 合并模式                                                 |
-| [columns](#columns)         | `Object[]`           | 否   |         | 列头(合并列时必填)                                       |
+| rowKey                      | `string`             | 否   | `id`    | 行数据的唯一 key                                         |
 | reCalc                      | `boolean`            | 否   | `false` | 是否重新计算合并 ( 例如，动态表格增加后重新计算合并 )    |
+
+> [!NOTE]
+>
+> - 合并结果会以 `_mergeOpts` ( 合并配置 ) 和 `_sortNo` ( 序号 ) 两个内部字段写入数据源，可用 [reCalc](#params-属性) 清理后重新计算
+> - `mergeFields` 可以直接传字段名数组，例如 `['province', 'name']`
 
 #### mode 属性
 
@@ -46,6 +52,7 @@
 | 名称 | 类型     | 必填 | 描述   |
 | ---- | -------- | ---- | ------ |
 | prop | `string` | 是   | 列字段 |
+| label | `string` | 否   | 列标题 ( 仅作展示用，不参与合并计算 ) |
 
 ```js
 const columns = [
@@ -157,6 +164,9 @@ const mergeData = getMergedData(options);
 | row   | `Object` | 是   | 行数据             |
 | field | `string` | 是   | 目标字段的合并数据 |
 
+> [!NOTE]
+> 当行数据没有合并配置时，返回默认值 `{ rowspan: 1, colspan: 1 }`
+
 ### 示例代码
 
 ```js
@@ -259,13 +269,13 @@ const result = splitIntoFragments({
 
 ### 语法
 
-`getSortNo(params)`
+`getSortNo(row)`
 
-#### params
+#### 参数
 
-| 名称   | 类型     | 必填 | 描述   |
-| ------ | -------- | ---- | ------ |
-| params | `Object` | 是   | 行数据 |
+| 名称 | 类型     | 必填 | 描述   |
+| ---- | -------- | ---- | ------ |
+| row  | `Object` | 是   | 行数据 |
 
 ### 示例代码
 
@@ -279,7 +289,30 @@ import { getSortNo } from "@zlabnext/ztool";
 </el-table-column>
 ```
 
+## constants
+
+合并计算使用的内部常量，可通过 `constants` 命名空间导入：
+
+```js
+import { constants } from "@zlabnext/ztool";
+
+constants.MERGE_OPTS_KEY; // '_mergeOpts' 合并配置字段的 key
+constants.SORT_NO_KEY; // '_sortNo'    序号字段的 key
+constants.ROW_KEY; // 'id'            行数据的默认唯一 key
+```
+
+> [!NOTE]
+> 合并结果会以这两个 key 写入数据源。如需自定义唯一 key，请通过 [rowKey](#params-属性) 配置。
+
 ## FAQ
+
+### 动态表格数据变化后，合并结果不对 ?
+
+数据源的合并结果缓存在 `_mergeOpts`、`_sortNo` 内部字段中。当数据发生增删后，请开启 `reCalc` 重新计算：
+
+```js
+const cellMerger = new CellMerger({ ...options, reCalc: true });
+```
 
 ### 按分组来 “合并行” 出现错版的情况 ?
 

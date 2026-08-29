@@ -4,20 +4,18 @@ layout: home
 
 hero:
   name: "Z-LabNext"
-  text: "keep improving"
-  # tagline: My great project tagline
+  text: "前端工具库"
+  tagline: 重复的代码交给工具库，人专注于业务
   actions:
     - theme: brand
       text: 快速开始
       link: /ztool/tool/quick-start
 
 features:
-  - title: 🔧 精炼实用的业务逻辑工具集
-    details: 写业务不再重复造轮子
+  - title: 🔧 业务工具集
+    details: 覆盖数据格式化、文件处理、日期区间等高频场景，减少重复代码。
     link: /ztool/tool/quick-start
-  - title: 📊 强大的表格合并与计算引擎
-    details: 表格处理从未如此简单
+  - title: 📊 表格合并计算
+    details: 一行配置完成表格的行/列合并，支持自定义合并逻辑。
     link: /ztool/merger/quick-start
-  - title: 🚀 更多精彩，正在加载中…
-    details: 更多工具？别急，我们正在努力写（摸鱼）中
 ---
